@@ -17,6 +17,8 @@ To configure backups for a ZFS dataset, run
 zfs set backups:b2:schedule=daily my/dataset/name
 ```
 
+Other supported schedule options are `hourly`, `daily`, `weekly`, and `monthly`.
+
 All other config is handled via vars set at the top of the script:
 
 | Variable                | Help                                                |
