@@ -33,7 +33,7 @@ All other config is handled via vars set at the top of the script:
 
 ## Multiple remotes or zpools
 
-If you require backing up to multiple rclone remotes, or from multiple zpools, you can run multiple instancse of the script.
+If you require backing up to multiple rclone remotes, or from multiple zpools, you can run multiple instances of the script.
 So long as `SCHEDULE_PROPERTY_NAME` and `PROCESSED_PROPERTY_NAME` are distinct for instances running on a zpool, there
 should be no conflict.
 
