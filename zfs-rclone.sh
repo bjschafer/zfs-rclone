@@ -2,6 +2,10 @@
 # shellcheck disable=SC2154
 set -x
 
+#########################
+# CONFIGURABLE OPTIONS #
+#########################
+
 PROCESSED_PROPERTY_NAME='backups:b2:last_processed'
 SCHEDULE_PROPERTY_NAME='backups:b2:schedule'
 RCLONE_OPTIONS=('--fast-list' '--progress' '--one-file-system') # '--syslog' 
@@ -10,13 +14,20 @@ RCLONE_STRATEGY='sync' # or copy, or move
 ZFS_TYPE='filesystem' # or snap, or all, or vol
 ZPOOL_NAME='warp'
 
+####################
+# INTERNAL OPTIONS #
+####################
+
 declare -A VALID_SCHEDULES
 VALID_SCHEDULES[hourly]=$((60*60))
 VALID_SCHEDULES[daily]=$((hourly*24))
 VALID_SCHEDULES[weekly]=$((daily*7))
 VALID_SCHEDULES[monthly]=$((weekly*4))
 
-# helper functions
+####################
+# HELPER FUNCTIONS #
+####################
+
 should_process() {
     local schedule="$1"
     local last_processed="$2"
@@ -33,6 +44,10 @@ exec_rclone() {
     echo "Running rclone:" "$RCLONE_STRATEGY" "${RCLONE_OPTIONS[@]}" "$fsname" "${RCLONE_REMOTE}:${fsname}"
     rclone "$RCLONE_STRATEGY" "${RCLONE_OPTIONS[@]}" "/${fsname}" "${RCLONE_REMOTE}:${fsname}"
 }
+
+#####################
+# MAIN PROGRAM LOOP #
+#####################
 
 # get all candidates for processing
 candidates=$(zfs get -H -o name,value -r "$SCHEDULE_PROPERTY_NAME" "$ZPOOL_NAME" -t "$ZFS_TYPE" | awk '$2 != "-"')
