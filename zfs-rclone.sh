@@ -24,9 +24,9 @@ mkdir -p "$LOCKFILE_DIRECTORY"
 
 declare -A VALID_SCHEDULES
 VALID_SCHEDULES[hourly]=$((60 * 60))
-VALID_SCHEDULES[daily]=$((hourly * 24))
-VALID_SCHEDULES[weekly]=$((daily * 7))
-VALID_SCHEDULES[monthly]=$((weekly * 4))
+VALID_SCHEDULES[daily]=$((${VALID_SCHEDULES[hourly]} * 24))
+VALID_SCHEDULES[weekly]=$((${VALID_SCHEDULES[daily]} * 7))
+VALID_SCHEDULES[monthly]=$((${VALID_SCHEDULES[weekly]} * 4))
 
 ####################
 # HELPER FUNCTIONS #
