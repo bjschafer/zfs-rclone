@@ -8,7 +8,14 @@ set -x
 
 PROCESSED_PROPERTY_NAME='backups:b2:last_processed'
 SCHEDULE_PROPERTY_NAME='backups:b2:schedule'
-RCLONE_OPTIONS=('--fast-list' '--syslog' '--one-file-system' '--exclude-if-present=.nobackup')
+RCLONE_OPTIONS=(
+    '--fast-list'
+    '--syslog'
+    '--copy-links'
+    '--one-file-system'
+    '--exclude-if-present=.nobackup'
+    '--bwlimit=07:00,5M:off;23:00,off' # limit to 5MiB/s upload from 0700 - 2300 daily
+)
 RCLONE_REMOTE='b2_crypt'
 RCLONE_STRATEGY='sync' # or copy, or move
 ZFS_TYPE='filesystem'  # or snap, or all, or vol
