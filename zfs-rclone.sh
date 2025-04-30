@@ -84,7 +84,7 @@ while read -r fsname schedule; do
         exec_rclone "$fsname"
         zfs set "$PROCESSED_PROPERTY_NAME"="$(date +%s)" "$fsname"
     else
-        echo "Skipping $fsname as it was last processed on $(date -d="@$last_processed" +%c) and schedule is $schedule"
+        echo "Skipping $fsname as it was last processed on $(date -d "@$last_processed" +%c) and schedule is $schedule"
     fi
 
 done <<<"$candidates"
