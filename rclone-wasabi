@@ -6,17 +6,10 @@ set -x
 # CONFIGURABLE OPTIONS #
 #########################
 
-PROCESSED_PROPERTY_NAME='backups:b2:last_processed'
-SCHEDULE_PROPERTY_NAME='backups:b2:schedule'
-RCLONE_OPTIONS=(
-    '--fast-list'
-    '--syslog'
-    '--copy-links'
-    '--one-file-system'
-    '--exclude-if-present=.nobackup'
-    '--bwlimit=07:00,5M:off;23:00,off' # limit to 5MiB/s upload from 0700 - 2300 daily
-)
-RCLONE_REMOTE='b2_crypt'
+PROCESSED_PROPERTY_NAME='backups:wasabi:last_processed'
+SCHEDULE_PROPERTY_NAME='backups:wasabi:schedule'
+RCLONE_OPTIONS=('--fast-list' '--syslog' '--copy-links' '--one-file-system' '--exclude-if-present=.nobackup')
+RCLONE_REMOTE='wasabi_crypt'
 RCLONE_STRATEGY='sync' # or copy, or move
 ZFS_TYPE='filesystem'  # or snap, or all, or vol
 ZPOOL_NAME='warp'
@@ -84,7 +77,7 @@ while read -r fsname schedule; do
         exec_rclone "$fsname"
         zfs set "$PROCESSED_PROPERTY_NAME"="$(date +%s)" "$fsname"
     else
-        echo "Skipping $fsname as it was last processed on $(date -d="@$last_processed" +%c) and schedule is $schedule"
+        echo "Skipping $fsname as it was last processed on $(date -d="$last_processed" +%c) and schedule is $schedule"
     fi
 
 done <<<"$candidates"
