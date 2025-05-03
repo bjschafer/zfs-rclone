@@ -16,7 +16,7 @@ func TestGetScheduledDatasets(t *testing.T) {
 		name      string
 		runStdout []string
 		runStderr []string
-		want      []string
+		want      map[string]string
 		wantErr   error
 	}{
 		{
@@ -26,7 +26,7 @@ func TestGetScheduledDatasets(t *testing.T) {
 				"tank/Example\t-",
 				"tank/Example/Archive\t-",
 			},
-			want: nil,
+			want: map[string]string{},
 		},
 		{
 			name: "all scheduled datasets",
@@ -35,10 +35,10 @@ func TestGetScheduledDatasets(t *testing.T) {
 				"tank/Example\thourly",
 				"tank/Example/Archive\tmonthly",
 			},
-			want: []string{
-				"tank",
-				"tank/Example",
-				"tank/Example/Archive",
+			want: map[string]string{
+				"tank":                 "daily",
+				"tank/Example":         "hourly",
+				"tank/Example/Archive": "monthly",
 			},
 		},
 		{
@@ -48,9 +48,9 @@ func TestGetScheduledDatasets(t *testing.T) {
 				"tank/Example\t-",
 				"tank/Example/Archive\tmonthly",
 			},
-			want: []string{
-				"tank",
-				"tank/Example/Archive",
+			want: map[string]string{
+				"tank":                 "daily",
+				"tank/Example/Archive": "monthly",
 			},
 		},
 		{
@@ -60,8 +60,8 @@ func TestGetScheduledDatasets(t *testing.T) {
 				"tank/Example\tminutely",
 				"tank/Example/Archive\tmonthly",
 			},
-			want: []string{
-				"tank/Example/Archive",
+			want: map[string]string{
+				"tank/Example/Archive": "monthly",
 			},
 		},
 		{

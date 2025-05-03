@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log/slog"
 	"os/exec"
-	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -27,8 +26,8 @@ func New() *ZFS {
 	}
 }
 
-func (z *ZFS) GetScheduledDatasets(ctx context.Context, schedulePropertyName, zpool, zfsType string) ([]string, error) {
-	var scheduledDatasets []string
+func (z *ZFS) GetScheduledDatasets(ctx context.Context, schedulePropertyName, zpool, zfsType string) (map[string]string, error) {
+	scheduledDatasets := make(map[string]string)
 
 	// zfs does not seem to support long options
 	args := []string{
@@ -64,10 +63,9 @@ func (z *ZFS) GetScheduledDatasets(ctx context.Context, schedulePropertyName, zp
 			slog.Warn("invalid schedule set; skipping", "schedule", value, "fsname", name)
 			continue
 		}
-		scheduledDatasets = append(scheduledDatasets, name)
+		scheduledDatasets[name] = value
 	}
 
-	slices.Sort(scheduledDatasets)
 	return scheduledDatasets, nil
 }
 
