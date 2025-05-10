@@ -129,8 +129,8 @@ func run(ctx context.Context, cmdName string, args []string) (stdout, stderr []s
 		return nil, nil, err
 	}
 
-	stdout = strings.Split(stdoutWriter.String(), "\n")
-	stderr = strings.Split(stderrWriter.String(), "\n")
+	stdout = strings.Split(strings.TrimSpace(stdoutWriter.String()), "\n")
+	stderr = strings.Split(strings.TrimSpace(stderrWriter.String()), "\n")
 
 	return stdout, stderr, nil
 }
